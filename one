@@ -2,3 +2,4 @@ def greet():
     return "Hello, World!"
 
 print(greet())
+print(greet())
