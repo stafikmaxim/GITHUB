@@ -1,0 +1,21 @@
+name: Авто-коммиты
+
+on:
+  schedule:
+    - cron: '0 12 * * *'  # Запускается каждый день в 12:00 UTC
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Клонирование репозитория
+        uses: actions/checkout@v2
+
+      - name: Добавление изменений
+        run: |
+          echo "$(date)" >> activity.log  # Записываем дату в файл
+          git config --global user.email "stafikmax@gmail.com"
+          git config --global user.name "stafikmaxim"
+          git add .
+          git commit -m "Авто-коммит: $(date)" || echo "Нет изменений"
+          git push origin main
