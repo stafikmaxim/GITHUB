@@ -1,22 +1,27 @@
 name: Авто-коммиты
 
 on:
-  workflow_dispatch:  # Добавляет кнопку для ручного запуска
+  workflow_dispatch:
   schedule:
-    - cron: '0 12 * * *'  # Запускается каждый день в 12:00 UTC
+    - cron: '0 12 * * *'  # Запуск каждый день в 12:00 UTC
 
 jobs:
   commit:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Даем разрешение на запись
     steps:
       - name: Клонирование репозитория
         uses: actions/checkout@v2
 
-      - name: Добавление изменений
+      - name: Настройка Git
         run: |
-          echo "$(date)" >> activity.log  # Записываем дату в файл
           git config --global user.email "stafikmax@gmail.com"
           git config --global user.name "stafikmaxim"
+
+      - name: Добавление изменений
+        run: |
+          echo "$(date)" >> activity.log
           git add .
           git commit -m "Авто-коммит: $(date)" || echo "Нет изменений"
-          git push origin main
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/stafikmaxim/GITHUB.git
